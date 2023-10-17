@@ -1,6 +1,8 @@
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { BillService } from './bill.service';
 import { Public } from 'src/auth/decorators/public.decorators';
+import { RefreshTokenGuard } from 'src/auth/guards/refresh_token.guard';
+import { CurrentUserId } from 'src/auth/decorators/currentUserId.decorator';
 
 @Controller('bills')
 export class BillController {
@@ -8,13 +10,20 @@ export class BillController {
 
     // @Public()
     // @
+    @Public()
+    @UseGuards(RefreshTokenGuard)
     @Get()
-    getUserbills() {
-        return this.billService.findAll();
+    getUserbills(@CurrentUserId() userId) {
+        return this.billService.findAll(userId);
     }
 
+    @Public()
+    @UseGuards(RefreshTokenGuard)
     @Get(':id')
-    getUserbill(@Param('id', new ParseIntPipe()) id: number) {
-        return this.billService.findOne(id);
+    getUserbill(
+        @CurrentUserId() userId,
+        @Param('id', new ParseIntPipe()) billId: number
+    ) {
+        return this.billService.findOne(userId, billId);
     }
 }
