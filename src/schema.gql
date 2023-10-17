@@ -34,11 +34,6 @@ type User {
   invoices: [Invoice!]
 }
 
-type Auth {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
 type SignResponse {
   access_token: String!
   refresh_token: String!
@@ -52,6 +47,11 @@ type LogoutResponse {
 type NewTokensResponse {
   access_token: String!
   refresh_token: String!
+}
+
+type Auth {
+  """ExampleField (placeholder)"""
+  exampleField: Int!
 }
 
 type Query {

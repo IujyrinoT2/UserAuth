@@ -1,6 +1,5 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
-import { Auth } from './entities/auth.entity';
 import { UpdateAuthInput } from './dto/update-auth.input';
 import { SignUpInput } from './dto/signup-input';
 import { SignResponse } from './dto/sign-response';
@@ -12,6 +11,7 @@ import { CurrentUserId } from './decorators/currentUserId.decorator';
 import { CurrentUser } from './decorators/currentUser.decorator';
 import { RefreshTokenGuard } from './guards/refresh_token.guard';
 import { UseGuards } from '@nestjs/common';
+import { Auth } from './entities/auth.entity';
 
 @Resolver(() => Auth)
 export class AuthResolver {
