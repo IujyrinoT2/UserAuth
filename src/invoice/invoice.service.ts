@@ -8,12 +8,12 @@ export class InvoiceService {
 
     constructor(private prisma: PrismaService) { }
 
-    findAll() {
-        return this.prisma.invoice.findMany();
+    findAll(userId: number) {
+        return this.prisma.invoice.findMany({ where: { user_id: userId } });
     }
 
-    findOne(id: number) {
-        return this.prisma.invoice.findUnique({ where: { id } })
+    findOne(userId: number, invoiceId: number) {
+        return this.prisma.invoice.findUnique({ where: { user_id: userId, id: invoiceId } });
     }
 
     create(createInvoiceInput: CreateInvoiceInput) {

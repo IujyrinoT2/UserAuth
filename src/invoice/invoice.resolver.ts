@@ -3,6 +3,10 @@ import { InvoiceService } from './invoice.service';
 import { Invoice } from './entities/invoice.entity';
 import { CreateInvoiceInput } from './dto/create-invoice.input';
 import { UpdateInvoiceInput } from './dto/update-invoice.input';
+import { Public } from 'src/auth/decorators/public.decorators';
+import { UseGuards } from '@nestjs/common';
+import { RefreshTokenGuard } from 'src/auth/guards/refresh_token.guard';
+import { CurrentUserId } from 'src/auth/decorators/currentUserId.decorator';
 
 @Resolver(() => Invoice)
 export class InvoiceResolver {
@@ -13,14 +17,20 @@ export class InvoiceResolver {
         return this.invoiceService.create(createInvoiceInput);
     }
 
+    @Public()
+    @UseGuards(RefreshTokenGuard)
     @Query(() => [Invoice], { name: 'invoices' })
-    findAll() {
-        return this.invoiceService.findAll();
+    findAll(@CurrentUserId() userId: number) {
+        return this.invoiceService.findAll(userId);
     }
 
+    @Public()
+    @UseGuards(RefreshTokenGuard)
     @Query(() => Invoice, { name: 'invoice' })
-    findOne(@Args('id', { type: () => Int }) id: number) {
-        return this.invoiceService.findOne(id);
+    findOne(
+        @CurrentUserId() userId: number,
+        @Args('id', { type: () => Int }) invoiceId: number) {
+        return this.invoiceService.findOne(userId, invoiceId);
     }
 
     @Mutation(() => Invoice)
