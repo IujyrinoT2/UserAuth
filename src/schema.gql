@@ -4,11 +4,12 @@
 
 type Bill {
   id: Int!
-  ammount: Float!
+  amount: Float!
   due_date: DateTime!
   details: String!
   user: User!
   user_id: Int!
+  account: String!
 }
 
 """
@@ -18,7 +19,7 @@ scalar DateTime
 
 type Invoice {
   id: Int!
-  ammount: Float!
+  amount: Float!
   due_date: DateTime!
   details: String!
   user: User!

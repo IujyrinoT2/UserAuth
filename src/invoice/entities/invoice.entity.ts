@@ -8,7 +8,7 @@ export class Invoice {
     id: number;
 
     @Field(() => Float)
-    ammount: number;
+    amount: number;
 
     @Field()
     due_date: Date;

@@ -22,18 +22,19 @@ model User {
 
 model Bill {
     id       Int      @id @default(autoincrement())
-    ammount  Float
-    due_date DateTime
+    amount   Float
+    due_date DateTime @db.Date
     details  String
     user     User     @relation(fields: [user_id], references: [id])
     user_id  Int
+    account  String
 }
 
 model Invoice {
     id Int @id @default(autoincrement())
 
-    ammount  Float
-    due_date DateTime
+    amount   Float
+    due_date DateTime @db.Date
     details  String
     user     User     @relation(fields: [user_id], references: [id])
     user_id  Int

@@ -8,7 +8,7 @@ export class Bill {
     id: number;
 
     @Field(() => Float)
-    ammount: number;
+    amount: number;
 
     @Field()
     due_date: Date;
@@ -21,4 +21,7 @@ export class Bill {
 
     @Field(() => Int)
     user_id: number;
+
+    @Field()
+    account: string;
 }
