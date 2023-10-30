@@ -3,6 +3,7 @@ import { CreateBillInput } from './dto/create-bill.input';
 import { UpdateBillInput } from './dto/update-bill.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { equals } from 'class-validator';
+import { error } from 'console';
 
 @Injectable()
 export class BillService {
@@ -30,9 +31,20 @@ export class BillService {
     }
 
     // Function to return the sum of the bills with specific dates and account types
-    async calcDateAccountSum(date: string, account: string) {
-        const parsedDate: Date = new Date(date);                     // type casted the parsed date string to Date type
-        const aggregation = await this.prisma.bill.aggregate({       // aggregation that matches parsed date and string
+    async calcDateAccountSum(date: number, account: string) {
+        let parsedDate: Date = null;
+
+        // Date conversion
+        try {
+        parsedDate = this.ExcelDateToJSDate(date);       
+        } catch(error) {
+            console.error("Error converting date from Excel", error);
+        }
+        console.log(`from excel date: ${date}\nmodified date: ${parsedDate}`);
+
+        // aggregation that matches parsed date and account string
+        try {
+        const aggregation = await this.prisma.bill.aggregate({       
             where: {
                 due_date: parsedDate,
                 account
@@ -41,8 +53,14 @@ export class BillService {
                 amount: true
             }
         });
-
         return aggregation._sum.amount || 0;                         // returns aggregation sum or 0 if no entries were found
+        } catch(error) {
+            console.error("Error calculating balance", error);
+        }
     }
 
-}
+    // Converts date received from excel to typescript date
+    ExcelDateToJSDate(date: number) {
+        return new Date(Math.round((date - 25569)*86400*1000));
+      }
+    }

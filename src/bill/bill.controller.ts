@@ -23,16 +23,17 @@ export class BillController {
     @Public()
     // @UseGuards(RefreshTokenGuard)
     @Get(':date/:account')
-    async getDateAccountSum(@Param('date') date: string, @Param('account') account: string) {
-        console.log(`Request made with ${date} and ${account} `)
-        let value
+    async getDateAccountSum(@Param('date', new ParseIntPipe()) date: number,
+                            @Param('account') account: string) {
+        console.log(`Request made with ${date} and ${account} `);
+        let value;
         try{
             value = await this.billService.calcDateAccountSum(date, account);
-            console.log(value)
+            console.log(value);
         }catch(error){
-            console.log(error)
+            console.log(error);
         }
-        return value
+        return value;
     }
 
     // @Public()

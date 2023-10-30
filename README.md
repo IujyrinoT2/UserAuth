@@ -42,8 +42,11 @@ REFRESH_TOKEN_SECRET="m5RxEUwabdYc0KQXdPKNt3wjRhAkdUno70Y44NVkPP5it7POnyZHHzcTJF
 5. start the database server with ```# docker-compose up```  
 6. generate prisma client with ```$ npx prisma generate```  
 7. generate database tables with ```$ npx prisma migrate dev --name init```   
-8. populate database with ```PGPASSWORD=123 psql -h localhost -U root -p 5432 -d authdb -a -q -f PopulateDB.sql```
-or empty the db with ```PGPASSWORD=123 psql -h localhost -U root -p 5432 -d authdb -a -q -f EmptyDB.sql```
+8. copy the populate and empty scripts on the container with ```docker cp PopulateDB.sql <cont_id>:/PopulateDB.sql``` and  
+```docker cp EmptyDB.sql <cont_id>:/EmptyDB.sql```  
+run the scripts form outside the container like this:  
+```docker-compose exec db env PGPASSWORD=123 psql -h localhost -U root -p 5432 -d authdb -a -q -f /PopulateDB.sql```
+or empty the db with ```PGPASSWORD=123 psql -h localhost -U root -p 5432 -d authdb -a -q -f /EmptyDB.sql```
 9. run the nest server with either ```$ npm start``` or ```$ npm run dev```, server listens to port 3000  
 10. Prisma Studio can be started with ```$ npx prisma studio``` and opens on localhost:5555  
 
