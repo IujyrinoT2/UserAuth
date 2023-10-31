@@ -3,6 +3,7 @@ import { BillService } from './bill.service';
 import { Public } from 'src/auth/decorators/public.decorators';
 import { RefreshTokenGuard } from 'src/auth/guards/refresh_token.guard';
 import { CurrentUserId } from 'src/auth/decorators/currentUserId.decorator';
+import { calculateBalanceResponse } from './dto/calculate-balance.response';
 
 @Controller('bills')
 export class BillController {
@@ -20,11 +21,12 @@ export class BillController {
         return this.billService.findOne(userId, billId);
     }
 
+    // Send account balance to excel
     @Public()
     // @UseGuards(RefreshTokenGuard)
     @Get(':date/:account')
     async getDateAccountSum(@Param('date', new ParseIntPipe()) date: number,
-                            @Param('account') account: string) {
+                            @Param('account') account: string): Promise<calculateBalanceResponse> {
         console.log(`Request made with ${date} and ${account} `);
         let value;
         try{

@@ -4,6 +4,7 @@ import { UpdateBillInput } from './dto/update-bill.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { equals } from 'class-validator';
 import { error } from 'console';
+import { calculateBalanceResponse } from './dto/calculate-balance.response';
 
 @Injectable()
 export class BillService {
@@ -31,10 +32,10 @@ export class BillService {
     }
 
     // Function to return the sum of the bills with specific dates and account types
-    async calcDateAccountSum(date: number, account: string) {
+    async calcDateAccountSum(date: number, account: string): Promise<calculateBalanceResponse> {
         let parsedDate: Date = null;
-
-        // Date conversion
+        return {message: "Please format date"}
+    /*    // Date conversion
         try {
         parsedDate = this.ExcelDateToJSDate(date);       
         } catch(error) {
@@ -57,6 +58,7 @@ export class BillService {
         } catch(error) {
             console.error("Error calculating balance", error);
         }
+        */
     }
 
     // Converts date received from excel to typescript date
