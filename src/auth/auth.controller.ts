@@ -24,7 +24,7 @@ export class AuthController {
             console.log(failedSigninResponse.message + "\n" + failedSigninResponse.errorstack);
             
             response = failedSigninResponse;
-            return response;
+            throw response;
         }
     }
 }
