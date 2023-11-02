@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { BadRequestException, Controller, Get, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { BillService } from './bill.service';
 import { Public } from 'src/auth/decorators/public.decorators';
 import { RefreshTokenGuard } from 'src/auth/guards/refresh_token.guard';
@@ -7,8 +7,8 @@ import { calculateBalanceResponse } from './dto/calculate-balance.response';
 
 @Controller('bills')
 export class BillController {
-    constructor(private readonly billService: BillService) { }
 
+    constructor(private readonly billService: BillService) { }
 
     @Public()
     @UseGuards(RefreshTokenGuard)
@@ -25,9 +25,11 @@ export class BillController {
     @Public()
     // @UseGuards(RefreshTokenGuard)
     @Get(':date/:account')
-    async getDateAccountSum(@Param('date', new ParseIntPipe()) date: number,
+    async getDateAccountSum(@Param('date', new ParseIntPipe({
+        exceptionFactory: (error) => new BadRequestException('Please reformat date')
+    })) date: number,
                             @Param('account') account: string): Promise<calculateBalanceResponse> {
-        console.log(`Request made with ${date} and ${account} `);
+        console.log(`Request made with ${date} and ${account}`);
         let value;
         try{
             value = await this.billService.calcDateAccountSum(date, account);
@@ -38,8 +40,6 @@ export class BillController {
         return value;
     }
 
-    // @Public()
-    // @
     @Public()
     @UseGuards(RefreshTokenGuard)
     @Get()

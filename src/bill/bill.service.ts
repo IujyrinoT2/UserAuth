@@ -34,12 +34,12 @@ export class BillService {
     // Function to return the sum of the bills with specific dates and account types
     async calcDateAccountSum(date: number, account: string): Promise<calculateBalanceResponse> {
         let parsedDate: Date = null;
-        return {message: "Please format date"}
-    /*    // Date conversion
+        // Date conversion
         try {
         parsedDate = this.ExcelDateToJSDate(date);       
         } catch(error) {
             console.error("Error converting date from Excel", error);
+            return {message: "Error converting date from Excel"};
         }
         console.log(`from excel date: ${date}\nmodified date: ${parsedDate}`);
 
@@ -54,11 +54,14 @@ export class BillService {
                 amount: true
             }
         });
-        return aggregation._sum.amount || 0;                         // returns aggregation sum or 0 if no entries were found
+        return {
+            balance: aggregation._sum.amount || 0,                          // returns aggregation sum or 0 if no entries were found
+            message: "Balance calculated successfully"
+        };                         
         } catch(error) {
             console.error("Error calculating balance", error);
+            return {message: "Error calculating balance"};
         }
-        */
     }
 
     // Converts date received from excel to typescript date
