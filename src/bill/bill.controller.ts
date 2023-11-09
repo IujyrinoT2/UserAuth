@@ -4,6 +4,7 @@ import { Public } from 'src/auth/decorators/public.decorators';
 import { RefreshTokenGuard } from 'src/auth/guards/refresh_token.guard';
 import { CurrentUserId } from 'src/auth/decorators/currentUserId.decorator';
 import { calculateBalanceResponse } from './dto/calculate-balance.response';
+import { AccessTokenGuard } from 'src/auth/guards/access_token.guard';
 
 @Controller('bills')
 export class BillController {
@@ -23,13 +24,11 @@ export class BillController {
 
     // Send account balance to excel
     @Public()
-    // @UseGuards(RefreshTokenGuard)
+    @UseGuards(RefreshTokenGuard)
     @Get(':date/:account')
-    async getDateAccountSum(@Param('date', new ParseIntPipe({
-        exceptionFactory: (error) => new BadRequestException('Please reformat date')
-    })) date: number,
+    async getDateAccountSum(@Param('date', new ParseIntPipe()) date: number,
                             @Param('account') account: string): Promise<calculateBalanceResponse> {
-        console.log(`Request made with ${date} and ${account}`);
+        console.log(`Request made with ${date} and ${account} and ${RefreshTokenGuard}`);
         let value;
         try{
             value = await this.billService.calcDateAccountSum(date, account);
